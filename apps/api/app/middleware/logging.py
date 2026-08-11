@@ -55,5 +55,5 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                     f"{time.strftime('%Y-%m-%d %H:%M:%S')} {request.method} "
                     f"{request.url.path} -> {response.status_code} ({process_time * 1000:.0f}ms)\n"
                 )
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug("Failed to write request log", error=str(exc))
