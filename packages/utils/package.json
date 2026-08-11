@@ -1,0 +1,22 @@
+{
+  "name": "@kinetix/utils",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@kinetix/shared-types": "workspace:*",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.4.0"
+  },
+  "devDependencies": {
+    "@kinetix/config": "workspace:*",
+    "typescript": "^5.4.5",
+    "vitest": "^2.0.0"
+  }
+}

@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+dist
+build
+.next
+out
+
+# Logs & caching
+*.log
+.turbo
+*.tsbuildinfo
+
+# Test coverage
+coverage
+
+# Local uploads (API storage service)
+apps/api/uploads
+
+# OS
+.DS_Store

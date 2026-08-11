@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 41 26% 96%;
+    --foreground: 186 17% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 186 17% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 186 17% 15%;
+    --primary: 183 54% 15%;
+    --primary-foreground: 41 26% 96%;
+    --secondary: 46 53% 46%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 41 25% 94%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 41 25% 92%;
+    --accent-foreground: 183 54% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --info: 217 91% 60%;
+    --info-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 183 54% 15%;
+    --radius: 1rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    @apply bg-primary/10 text-primary;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply rounded-2xl border border-white/60 bg-white/60 backdrop-blur-xl supports-[backdrop-filter]:bg-white/40;
+    box-shadow:
+      0 8px 32px rgba(18, 57, 60, 0.18),
+      0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  }
+
+  .panel-heading {
+    @apply text-base font-semibold tracking-tight text-primary;
+  }
+
+  .gradient-chip {
+    @apply flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground;
+    box-shadow: 0 4px 12px rgba(18, 57, 60, 0.25);
+  }
+
+  .gradient-chip-gold {
+    @apply flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary/70 text-secondary-foreground;
+    box-shadow: 0 4px 12px rgba(168, 130, 60, 0.3);
+  }
+}
