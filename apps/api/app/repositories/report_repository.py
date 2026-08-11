@@ -9,7 +9,7 @@ class ReportRepository(BaseRepository[Report]):
     def __init__(self):
         super().__init__(Report)
 
-    async def get(self, db: AsyncSession, **filters) -> Report | None:  # type: ignore[override]
+    async def get(self, db: AsyncSession, **filters) -> Report | None:
         return await super().get(db, **filters)
 
 

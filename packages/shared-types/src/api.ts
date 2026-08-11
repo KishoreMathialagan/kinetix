@@ -19,7 +19,7 @@ export interface Paginated<T> {
   pages: number;
 }
 
-export type PaginatedResponse<T> = ApiResponse<Paginated<T>>;
+export interface PaginatedResponse<T> extends ApiResponse<Paginated<T>> {}
 
 export interface ListParams {
   page?: number;

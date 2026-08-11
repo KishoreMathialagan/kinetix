@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any
 
 import structlog
 from redis.asyncio import Redis
@@ -25,7 +25,7 @@ class RedisManager:
     async def close(cls) -> None:
         if cls._client is not None:
             logger.info("Closing Redis client")
-            await cls._client.aclose()
+            await cls._client.aclose() # type: ignore
             cls._client = None
 
     @classmethod
@@ -46,7 +46,7 @@ class RedisManager:
     @classmethod
     async def get(cls, key: str) -> str | None:
         client = await cls.get_client()
-        return cast("str | None", await client.get(name=key))
+        return await client.get(name=key)
 
     @classmethod
     async def delete(cls, key: str) -> None:

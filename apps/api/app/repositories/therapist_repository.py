@@ -14,7 +14,7 @@ class TherapistRepository(BaseRepository[Therapist]):
     def __init__(self):
         super().__init__(Therapist)
 
-    async def get(self, db: AsyncSession, **filters) -> Therapist | None:  # type: ignore[override]
+    async def get(self, db: AsyncSession, **filters) -> Therapist | None:
         stmt = select(Therapist).options(selectinload(Therapist.user))
         for field, value in filters.items():
             stmt = stmt.where(getattr(Therapist, field) == value)

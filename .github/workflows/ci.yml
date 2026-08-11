@@ -16,7 +16,7 @@ jobs:
           version: 9
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -28,7 +28,7 @@ jobs:
         run: pip install uv
       - name: Install backend dependencies
         working-directory: ./apps/api
-        run: uv sync --extra dev
+        run: uv sync
       - name: Lint
         run: pnpm run lint
       - name: Typecheck

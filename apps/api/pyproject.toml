@@ -39,10 +39,7 @@ line-length = 100
 ignore = ["B008", "BLE001", "UP046", "TRY201", "F841", "DTZ003", "DTZ011", "UP047"]
 
 [tool.mypy]
-strict = false
-check_untyped_defs = true
-warn_unused_ignores = true
-exclude = ["scripts/"]
+strict = true
 plugins = [
     "pydantic.mypy",
     "sqlalchemy.ext.mypy.plugin"

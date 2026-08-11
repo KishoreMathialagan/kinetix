@@ -1,7 +1,7 @@
 import os
 from typing import Protocol
 
-import aiofiles  # type: ignore[import-untyped]
+import aiofiles
 from fastapi import UploadFile
 
 
@@ -27,8 +27,6 @@ class LocalStorageService:
         target_dir = os.path.join(self.base_path, directory)
         os.makedirs(target_dir, exist_ok=True)
         
-        if not file.filename:
-            raise ValueError("Uploaded file has no filename")
         file_path = os.path.join(target_dir, file.filename)
         
         async with aiofiles.open(file_path, 'wb') as out_file:

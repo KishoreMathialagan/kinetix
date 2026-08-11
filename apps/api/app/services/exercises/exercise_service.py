@@ -52,10 +52,8 @@ class ExerciseService:
                 entity="exercise_program", entity_id=str(program.id),
             )
             await db.commit()
-            created = await exercise_program_repo.get(db, id=program.id)
-            if created is None:
-                raise ValueError("Failed to reload created exercise program.")
-            return created
+            program = await exercise_program_repo.get(db, id=program.id)
+            return program
         except Exception as exc:
             await db.rollback()
             raise ValueError(f"Failed to create exercise program: {exc!s}")

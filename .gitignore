@@ -16,7 +16,6 @@ out
 # Logs & caching
 *.log
 .turbo
-*.tsbuildinfo
 
 # Test coverage
 coverage

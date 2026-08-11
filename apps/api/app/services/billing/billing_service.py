@@ -110,14 +110,11 @@ class BillingService:
                 entity="invoice", entity_id=str(invoice.id), new_value=str(invoice.total),
             )
             await db.commit()
-            created = await billing_repo.get(db, id=invoice.id)
-            if created is None:
-                raise ValueError("Failed to reload created invoice.")
+            invoice = await billing_repo.get(db, id=invoice.id)
         except Exception as exc:
             await db.rollback()
             raise ValueError(f"Failed to create invoice: {exc!s}")
 
-        invoice = created
         await self._notify_patient(
             db,
             patient_id=request.patient_id,
@@ -172,9 +169,9 @@ class BillingService:
             await db.flush()
             paid_total = await billing_repo.paid_total(db, invoice_id=invoice.id)
             if paid_total >= invoice.total:
-                invoice.status = InvoiceStatus.PAID
+                invoice.status = InvoiceStatus.PAID.value
             elif paid_total > 0:
-                invoice.status = InvoiceStatus.PARTIALLY_PAID
+                invoice.status = InvoiceStatus.PARTIALLY_PAID.value
             await auth_service.log_audit_event(
                 db, user_id=current_user_id, action="payment_recorded",
                 entity="payment", entity_id=str(payment.id),
