@@ -13,7 +13,7 @@ class ExerciseProgramRepository(BaseRepository[ExerciseProgram]):
     def __init__(self):
         super().__init__(ExerciseProgram)
 
-    async def get(self, db: AsyncSession, **filters) -> ExerciseProgram | None:
+    async def get(self, db: AsyncSession, **filters) -> ExerciseProgram | None:  # type: ignore[override]
         stmt = select(ExerciseProgram).options(
             selectinload(ExerciseProgram.exercise_items)
         )

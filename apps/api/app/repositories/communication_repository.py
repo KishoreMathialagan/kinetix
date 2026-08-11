@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.communication import DeviceToken, Notification
@@ -48,7 +48,7 @@ class NotificationRepository(BaseRepository[Notification]):
 
     async def mark_all_read(self, db: AsyncSession, *, user_id: uuid.UUID) -> int:
         stmt = (
-            Notification.__table__.update()
+            update(Notification)
             .where(
                 Notification.user_id == user_id,
                 Notification.is_deleted == False,
@@ -58,7 +58,7 @@ class NotificationRepository(BaseRepository[Notification]):
         )
         result = await db.execute(stmt)
         await db.commit()
-        return result.rowcount or 0
+        return result.rowcount or 0  # type: ignore[attr-defined]
 
 
 notification_repo = NotificationRepository()

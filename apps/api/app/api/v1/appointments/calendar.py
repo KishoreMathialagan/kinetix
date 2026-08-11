@@ -19,7 +19,7 @@ async def get_calendar(
     end_date: date,
     patient_id: uuid.UUID | None = None,
     therapist_id: uuid.UUID | None = None,
-    current_user: Annotated[User, Depends(require_role(["admin", "therapist", "patient"]))] = None,
+    current_user: Annotated[User | None, Depends(require_role(["admin", "therapist", "patient"]))] = None,
     db: AsyncSession = Depends(get_db)
 ):
     if (end_date - start_date).days > 60:

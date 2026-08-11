@@ -2,7 +2,6 @@ import type {
   AppointmentStatus,
   AssessmentType,
   BloodGroup,
-  ConsentStatus,
   DevicePlatform,
   DocumentType,
   Gender,
@@ -10,10 +9,8 @@ import type {
   NotificationType,
   PaymentMethod,
   PaymentStatus,
-  SessionStatus,
   StrengthScale,
   TherapistStatus,
-  TreatmentStatus,
 } from './enums';
 import type { User } from './auth';
 

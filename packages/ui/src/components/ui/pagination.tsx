@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 
 import { cn } from '@kinetix/utils';
-import { Button, type ButtonProps } from './button';
+import { Button } from './button';
 
 interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
   page: number;

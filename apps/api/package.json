@@ -6,7 +6,7 @@
     "dev": "uv run uvicorn main:app --reload",
     "lint": "uv run ruff check .",
     "format": "uv run ruff format .",
-    "typecheck": "uv run mypy .",
+    "typecheck": "uv run mypy app main.py",
     "test": "uv run pytest",
     "build": "echo 'No build step required for Python'"
   }

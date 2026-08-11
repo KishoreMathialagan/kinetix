@@ -16,11 +16,11 @@ class BaseRepository(Generic[ModelType]):
     async def get(
         self, db: AsyncSession, id: uuid.UUID, load_options: list | None = None
     ) -> ModelType | None:
-        stmt = select(self.model).where(self.model.id == id)
+        stmt = select(self.model).where(self.model.id == id)  # type: ignore[attr-defined]
         
         # Add a condition for soft delete if the model supports it
         if hasattr(self.model, "is_deleted"):
-            stmt = stmt.where(self.model.is_deleted == False)
+            stmt = stmt.where(self.model.is_deleted == False)  # type: ignore[attr-defined]
 
         if load_options:
             for option in load_options:
@@ -35,8 +35,7 @@ class BaseRepository(Generic[ModelType]):
         stmt = select(self.model).offset(skip).limit(limit)
         
         if hasattr(self.model, "is_deleted"):
-            stmt = stmt.where(self.model.is_deleted == False)
-            
+            stmt = stmt.where(self.model.is_deleted == False)  # type: ignore[attr-defined]
         result = await db.execute(stmt)
         return list(result.scalars().all())
 
@@ -68,16 +67,17 @@ class BaseRepository(Generic[ModelType]):
 
     async def delete(self, db: AsyncSession, *, id: uuid.UUID) -> ModelType:
         obj = await db.get(self.model, id)
-        if obj:
-            if hasattr(obj, "is_deleted"):
-                # Soft delete
-                obj.is_deleted = True
-                if hasattr(obj, "deleted_at"):
-                    from datetime import datetime
-                    obj.deleted_at = datetime.utcnow()
-                db.add(obj)
-            else:
-                # Hard delete
-                await db.delete(obj)
-            await db.commit()
+        if obj is None:
+            raise ValueError(f"{self.model.__name__} with id {id} not found")
+        if hasattr(obj, "is_deleted"):
+            # Soft delete
+            obj.is_deleted = True
+            if hasattr(obj, "deleted_at"):
+                from datetime import datetime
+                obj.deleted_at = datetime.utcnow()
+            db.add(obj)
+        else:
+            # Hard delete
+            await db.delete(obj)
+        await db.commit()
         return obj

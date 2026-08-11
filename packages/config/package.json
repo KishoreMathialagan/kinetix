@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "devDependencies": {
-    "typescript": "^5.4.5"
+    "eslint": "^8.57.1",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^8.65.0"
   }
 }

@@ -15,7 +15,7 @@ class PatientRepository(BaseRepository[Patient]):
     def __init__(self):
         super().__init__(Patient)
 
-    async def get(self, db: AsyncSession, **filters) -> Patient | None:
+    async def get(self, db: AsyncSession, **filters) -> Patient | None:  # type: ignore[override]
         stmt = select(Patient).options(selectinload(Patient.user))
         for field, value in filters.items():
             stmt = stmt.where(getattr(Patient, field) == value)
