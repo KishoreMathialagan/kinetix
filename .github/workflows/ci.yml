@@ -28,7 +28,7 @@ jobs:
         run: pip install uv
       - name: Install backend dependencies
         working-directory: ./apps/api
-        run: uv sync
+        run: uv sync --extra dev
       - name: Lint
         run: pnpm run lint
       - name: Typecheck
