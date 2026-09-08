@@ -14,7 +14,7 @@ import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 
 import { AuthCard } from '@/components/auth-card'
 import { Alert, AlertDescription } from '@kinetix/ui'
 import { toast } from '@kinetix/ui'
-import { login as loginRequest, getMe } from '@/services/auth'
+import { login as loginRequest } from '@/services/auth'
 import { toApiError } from '@/lib/api-client'
 import { useAuthStore, homePathForRole } from '@/stores/auth-store'
 import { setSessionCookie, clearSessionCookie } from '@/lib/session'
@@ -70,14 +70,14 @@ export default function LoginPage() {
   async function onSubmit(values: LoginValues) {
     setServerError(null)
     try {
-      const tokens = await loginRequest(values)
-      setTokens(tokens.access_token, tokens.refresh_token)
-      const user = await getMe()
-      if (!user.role || user.role !== role) {
+      const result = await loginRequest(values)
+      setTokens(result.access_token, result.refresh_token)
+      const user = result.user
+      if (!user || !user.role || user.role !== role) {
         clear()
         clearSessionCookie()
         setServerError(
-          user.role && ROLE_LABEL[user.role]
+          user?.role && ROLE_LABEL[user.role]
             ? `This account belongs to the ${ROLE_LABEL[user.role]} portal. Please sign in using the ${ROLE_LABEL[user.role]} login.`
             : `This account isn't registered as ${ROLE_LABEL[role]}. Please check your credentials or contact support.`,
         )

@@ -15,6 +15,7 @@ import {
 } from '@kinetix/ui'
 import { PageHeader, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { Dumbbell, CheckCircle2 } from 'lucide-react'
 import { listPrograms, checkIn, getProgramCompliance } from '@/services/exercises'
 import type { ExerciseProgram } from '@kinetix/shared-types'
@@ -39,6 +40,10 @@ export default function PatientExercisesPage() {
           <Skeleton className="h-40" />
           <Skeleton className="h-40" />
         </div>
+      ) : programs.isError ? (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load exercise programs. Please try again later.</AlertDescription>
+        </Alert>
       ) : !programs.data || programs.data.items.length === 0 ? (
         <EmptyState icon={Dumbbell} title="No programs yet" description="Your therapist will assign an exercise program soon." />
       ) : (

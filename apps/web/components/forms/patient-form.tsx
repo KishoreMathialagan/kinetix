@@ -23,21 +23,37 @@ import { registerPatient, updatePatient } from '@/services/patients'
 const genders = ['male', 'female', 'other', 'prefer_not_to_say'] as const
 const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'unknown'] as const
 
+const baseSchema = {
+  dob: z.string().optional(),
+  gender: z.enum(genders).optional(),
+  blood_group: z.enum(bloodGroups).optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  zip_code: z.string().optional(),
+  height: z.string().optional(),
+  weight: z.string().optional(),
+  blood_pressure: z.string().optional(),
+  temperature_spo2: z.string().optional(),
+  emergency_contact: z.string().optional(),
+  emergency_contact_relationship: z.string().optional(),
+  emergency_phone: z.string().optional(),
+  emergency_contact_address: z.string().optional(),
+  primary_concern: z.string().optional(),
+  medical_history: z.string().optional(),
+  allergies: z.string().optional(),
+  medications: z.string().optional(),
+  insurance_provider: z.string().optional(),
+  insurance_policy_number: z.string().optional(),
+}
+
 const createSchema = z.object({
   first_name: z.string().min(1, 'First name is required'),
   last_name: z.string().min(1, 'Last name is required'),
   email: z.string().email('Enter a valid email address'),
   phone: z.string().min(7, 'Enter a valid phone number'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  dob: z.string().optional(),
-  gender: z.enum(genders).optional(),
-  blood_group: z.enum(bloodGroups).optional(),
-  address: z.string().optional(),
-  emergency_contact: z.string().optional(),
-  emergency_phone: z.string().optional(),
-  medical_history: z.string().optional(),
-  allergies: z.string().optional(),
-  medications: z.string().optional(),
+  ...baseSchema,
 })
 
 const editSchema = z.object({
@@ -46,18 +62,10 @@ const editSchema = z.object({
   email: z.string().optional(),
   phone: z.string().optional(),
   password: z.string().optional(),
-  dob: z.string().optional(),
-  gender: z.enum(genders).optional(),
-  blood_group: z.enum(bloodGroups).optional(),
-  address: z.string().optional(),
-  emergency_contact: z.string().optional(),
-  emergency_phone: z.string().optional(),
-  medical_history: z.string().optional(),
-  allergies: z.string().optional(),
-  medications: z.string().optional(),
+  occupation: z.string().optional(),
   diagnosis: z.string().optional(),
   referred_by: z.string().optional(),
-  occupation: z.string().optional(),
+  ...baseSchema,
 })
 
 type BaseValues = z.infer<typeof editSchema>
@@ -181,28 +189,83 @@ export function PatientForm({ mode, patientId, defaultValues, onSuccess, submitL
             </SelectContent>
           </Select>
         </div>
+        {mode === 'edit' && (
+          <div className="space-y-2">
+            <Label htmlFor="occupation">Occupation</Label>
+            <Input id="occupation" placeholder="Patient occupation" {...register('occupation')} />
+          </div>
+        )}
         <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="address">Address</Label>
           <Textarea id="address" placeholder="Full address" {...register('address')} />
         </div>
         <div className="space-y-2">
+          <Label htmlFor="city">City</Label>
+          <Input id="city" placeholder="City" {...register('city')} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="state">State</Label>
+          <Input id="state" placeholder="State" {...register('state')} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="zip_code">ZIP Code</Label>
+          <Input id="zip_code" placeholder="ZIP code" {...register('zip_code')} />
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-4">
+        <div className="space-y-2">
+          <Label htmlFor="height">Height</Label>
+          <Input id="height" placeholder="e.g. 5'10" {...register('height')} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="weight">Weight</Label>
+          <Input id="weight" placeholder="e.g. 75kg" {...register('weight')} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="blood_pressure">Blood Pressure</Label>
+          <Input id="blood_pressure" placeholder="e.g. 120/80" {...register('blood_pressure')} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="temperature_spo2">Temperature / SpO2</Label>
+          <Input id="temperature_spo2" placeholder="e.g. 98.6F" {...register('temperature_spo2')} />
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
           <Label htmlFor="emergency_contact">Emergency contact name</Label>
           <Input id="emergency_contact" placeholder="Contact person" {...register('emergency_contact')} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="emergency_contact_relationship">Relationship</Label>
+          <Input id="emergency_contact_relationship" placeholder="e.g. Spouse" {...register('emergency_contact_relationship')} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="emergency_phone">Emergency phone</Label>
           <Input id="emergency_phone" type="tel" placeholder="Emergency number" {...register('emergency_phone')} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="medical_history">Medical history</Label>
+          <Label htmlFor="emergency_contact_address">Emergency contact address</Label>
+          <Input id="emergency_contact_address" placeholder="Contact address" {...register('emergency_contact_address')} />
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2 sm:col-span-2">
+          <Label htmlFor="primary_concern">Primary Concern / Reason for Visit</Label>
+          <Input id="primary_concern" placeholder="e.g. Chronic Pain Management, Sports Rehabilitation" {...register('primary_concern')} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="medical_history">Past Medical Conditions / Surgeries</Label>
           <Textarea id="medical_history" placeholder="Relevant medical history" {...register('medical_history')} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="allergies">Allergies</Label>
           <Textarea id="allergies" placeholder="Known allergies" {...register('allergies')} />
         </div>
-        <div className="space-y-2 sm:col-span-2">
-          <Label htmlFor="medications">Medications</Label>
+        <div className="space-y-2">
+          <Label htmlFor="medications">Current Medications</Label>
           <Textarea id="medications" placeholder="Current medications" {...register('medications')} />
         </div>
         {mode === 'edit' && (
@@ -212,16 +275,24 @@ export function PatientForm({ mode, patientId, defaultValues, onSuccess, submitL
               <Input id="diagnosis" placeholder="Primary diagnosis" {...register('diagnosis')} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="referred_by">Referred by</Label>
+              <Label htmlFor="referred_by">Referring Doctor</Label>
               <Input id="referred_by" placeholder="Referring doctor / hospital" {...register('referred_by')} />
-            </div>
-            <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="occupation">Occupation</Label>
-              <Input id="occupation" placeholder="Patient occupation" {...register('occupation')} />
             </div>
           </>
         )}
       </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="insurance_provider">Insurance Provider</Label>
+          <Input id="insurance_provider" placeholder="Insurance provider" {...register('insurance_provider')} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="insurance_policy_number">Policy Number</Label>
+          <Input id="insurance_policy_number" placeholder="Policy number" {...register('insurance_policy_number')} />
+        </div>
+      </div>
+
       <Button type="submit" className="w-full sm:w-auto" disabled={isSubmitting}>
         {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {submitLabel ?? (mode === 'create' ? 'Register patient' : 'Save changes')}

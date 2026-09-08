@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -106,7 +107,7 @@ class ClinicalService:
 
     async def list_assessments(
         self, db: AsyncSession, *, patient_id: uuid.UUID | None, page: int, size: int
-    ) -> PaginatedResponse[Assessment]:
+    ) -> PaginatedResponse[Any]:
         if patient_id:
             return await assessment_repo.list_by_patient(
                 db, patient_id=patient_id, page=page, size=size
@@ -203,7 +204,7 @@ class ClinicalService:
 
     async def list_sessions(
         self, db: AsyncSession, *, patient_id: uuid.UUID | None, page: int, size: int
-    ) -> PaginatedResponse[TreatmentSession]:
+    ) -> PaginatedResponse[Any]:
         if patient_id:
             return await treatment_session_repo.list_by_patient(
                 db, patient_id=patient_id, page=page, size=size

@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from sqlalchemy import func, select
@@ -20,7 +21,7 @@ class NotificationRepository(BaseRepository[Notification]):
         unread_only: bool = False,
         page: int = 1,
         size: int = 20,
-    ) -> PaginatedResponse[Notification]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(Notification).where(
             Notification.user_id == user_id, Notification.is_deleted == False
         )

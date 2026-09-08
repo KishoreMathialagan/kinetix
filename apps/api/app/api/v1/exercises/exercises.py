@@ -1,5 +1,5 @@
 import uuid
-from typing import Annotated
+from typing import Any,  Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,7 +28,7 @@ from app.utils.pagination import PaginatedResponse, paginate
 router = APIRouter()
 
 
-@router.get("/exercise-library", response_model=PaginatedResponse[ExerciseItemResponse], summary="Exercise library", description="Browse the exercise catalog with optional category filter.")
+@router.get("/exercise-library", summary="Exercise library", description="Browse the exercise catalog with optional category filter.")
 async def exercise_library(
     category: str | None = None,
     page: int = 1,
@@ -39,7 +39,7 @@ async def exercise_library(
     return await exercise_item_repo.library(db, category=category, page=page, size=size)
 
 
-@router.get("/exercise-programs", response_model=PaginatedResponse[ExerciseProgramResponse], summary="List exercise programs")
+@router.get("/exercise-programs", summary="List exercise programs")
 async def list_programs(
     patient_id: uuid.UUID | None = None,
     page: int = 1,

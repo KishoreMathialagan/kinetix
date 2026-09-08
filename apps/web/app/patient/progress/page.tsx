@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { PageHeader, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { TrendingUp } from 'lucide-react'
 import { formatDate } from '@kinetix/utils'
 import { getMyPatientProfile } from '@/services/patients'
@@ -32,6 +33,10 @@ export default function PatientProgressPage() {
 
       {progress.isPending ? (
         <Skeleton className="h-40" />
+      ) : progress.isError ? (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load progress data. Please try again later.</AlertDescription>
+        </Alert>
       ) : progress.data ? (
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

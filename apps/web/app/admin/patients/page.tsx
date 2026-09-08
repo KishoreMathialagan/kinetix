@@ -24,7 +24,7 @@ export default function AdminPatientsPage() {
   const router = useRouter()
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
-  const [gender, setGender] = useState<Gender | ''>('')
+  const [gender, setGender] = useState<Gender | '_all'>('_all')
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -38,10 +38,10 @@ export default function AdminPatientsPage() {
   const query = useQuery({
     queryKey: ['patients', 'admin', debouncedSearch, gender, page],
     queryFn: () =>
-      debouncedSearch || gender
+      debouncedSearch || gender !== '_all'
         ? searchPatients({
             name: debouncedSearch || undefined,
-            gender: gender || undefined,
+            gender: gender !== '_all' ? gender : undefined,
             page,
             size: 10,
           })
@@ -127,12 +127,12 @@ export default function AdminPatientsPage() {
       />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <SearchInput placeholder="Search by name, email or code…" value={search} onValueChange={setSearch} className="w-full sm:max-w-sm" />
-        <Select value={gender} onValueChange={(v) => setGender(v as Gender | '')}>
+        <Select value={gender} onValueChange={(v) => setGender(v as Gender | '_all')}>
           <SelectTrigger className="w-full sm:w-44">
             <SelectValue placeholder="All genders" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All genders</SelectItem>
+            <SelectItem value="_all">All genders</SelectItem>
             {filterGenders.map((g) => (
               <SelectItem key={g} value={g}>
                 {g.charAt(0).toUpperCase() + g.slice(1)}

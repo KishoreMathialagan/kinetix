@@ -25,6 +25,8 @@ export interface TherapistProfile {
 export interface PatientProfile {
   user: User;
   profile: Patient;
+  profile_completed: boolean;
+  missing_fields: string[];
 }
 
 export interface Patient {
@@ -34,15 +36,28 @@ export interface Patient {
   dob: string | null;
   gender: Gender | null;
   blood_group: BloodGroup | null;
+  occupation: string | null;
   address: string | null;
+  city: string | null;
+  state: string | null;
+  zip_code: string | null;
+  phone_number: string | null;
+  height: string | null;
+  weight: string | null;
+  blood_pressure: string | null;
+  temperature_spo2: string | null;
   emergency_contact: string | null;
+  emergency_contact_relationship: string | null;
   emergency_phone: string | null;
+  emergency_contact_address: string | null;
+  primary_concern: string | null;
   medical_history: string | null;
   allergies: string | null;
   medications: string | null;
   diagnosis: string | null;
   referred_by: string | null;
-  occupation: string | null;
+  insurance_provider: string | null;
+  insurance_policy_number: string | null;
   created_at: string;
   updated_at: string;
   user?: UserLite;
@@ -67,26 +82,50 @@ export interface PatientRegistrationRequest {
   gender: Gender;
   blood_group?: BloodGroup | null;
   address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zip_code?: string | null;
+  height?: string | null;
+  weight?: string | null;
+  blood_pressure?: string | null;
+  temperature_spo2?: string | null;
   emergency_contact?: string | null;
+  emergency_contact_relationship?: string | null;
   emergency_phone?: string | null;
+  emergency_contact_address?: string | null;
+  primary_concern?: string | null;
   medical_history?: string | null;
   allergies?: string | null;
   medications?: string | null;
+  insurance_provider?: string | null;
+  insurance_policy_number?: string | null;
 }
 
 export interface PatientUpdateRequest {
   dob?: string | null;
   gender?: Gender | null;
   blood_group?: BloodGroup | null;
+  occupation?: string | null;
   address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zip_code?: string | null;
+  height?: string | null;
+  weight?: string | null;
+  blood_pressure?: string | null;
+  temperature_spo2?: string | null;
   emergency_contact?: string | null;
+  emergency_contact_relationship?: string | null;
   emergency_phone?: string | null;
+  emergency_contact_address?: string | null;
+  primary_concern?: string | null;
   medical_history?: string | null;
   allergies?: string | null;
   medications?: string | null;
   diagnosis?: string | null;
   referred_by?: string | null;
-  occupation?: string | null;
+  insurance_provider?: string | null;
+  insurance_policy_number?: string | null;
 }
 
 export interface PatientSearchRequest {

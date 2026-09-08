@@ -1,5 +1,5 @@
 import uuid
-from typing import Annotated
+from typing import Any,  Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,7 +22,7 @@ from app.utils.pagination import PaginatedResponse
 
 router = APIRouter()
 
-@router.get("", response_model=PaginatedResponse[TherapistResponse], summary="Get therapists", description="List all therapists with pagination.")
+@router.get("", summary="Get therapists", description="List all therapists with pagination.")
 async def list_therapists(
     page: int = 1,
     size: int = 20,
@@ -43,7 +43,7 @@ async def register_therapist(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.get("/search", response_model=PaginatedResponse[TherapistResponse], summary="Search therapists", description="Generic search and pagination for therapists.")
+@router.get("/search", summary="Search therapists", description="Generic search and pagination for therapists.")
 async def search_therapists(
     name: str | None = None,
     phone: str | None = None,

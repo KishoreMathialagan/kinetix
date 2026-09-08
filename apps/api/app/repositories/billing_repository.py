@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 from datetime import date
 
@@ -45,7 +46,7 @@ class BillingRepository(BaseRepository[Invoice]):
         status: InvoiceStatus | None = None,
         page: int = 1,
         size: int = 20,
-    ) -> PaginatedResponse[Invoice]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(Invoice).options(
             selectinload(Invoice.items), selectinload(Invoice.payments)
         ).where(Invoice.is_deleted == False)

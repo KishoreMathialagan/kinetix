@@ -35,7 +35,7 @@ export function toApiError(error: unknown): ApiClientError {
 
 export const apiClient = axios.create({
   baseURL: env.NEXT_PUBLIC_API_URL,
-  timeout: 30000,
+  timeout: 15000,
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -56,7 +56,7 @@ async function refreshAccessToken(): Promise<string> {
   const res = await axios.post<TokenResponse>(
     `${env.NEXT_PUBLIC_API_URL}/auth/refresh`,
     { refresh_token: refreshToken },
-    { timeout: 30000 },
+    { timeout: 10000 },
   );
   setTokens(res.data.access_token, res.data.refresh_token);
   return res.data.access_token;

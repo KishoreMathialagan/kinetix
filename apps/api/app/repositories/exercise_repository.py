@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from sqlalchemy import func, select
@@ -36,7 +37,7 @@ class ExerciseProgramRepository(BaseRepository[ExerciseProgram]):
 
     async def list_all(
         self, db: AsyncSession, *, page: int = 1, size: int = 20
-    ) -> PaginatedResponse[ExerciseProgram]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(ExerciseProgram).options(
             selectinload(ExerciseProgram.exercise_items)
         ).where(ExerciseProgram.is_deleted == False)
@@ -54,7 +55,7 @@ class ExerciseItemRepository(BaseRepository[ExerciseItem]):
 
     async def library(
         self, db: AsyncSession, *, category: str | None = None, page: int = 1, size: int = 20
-    ) -> PaginatedResponse[ExerciseItem]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(ExerciseItem).where(ExerciseItem.is_deleted == False)
         if category:
             stmt = stmt.where(ExerciseItem.category == category)

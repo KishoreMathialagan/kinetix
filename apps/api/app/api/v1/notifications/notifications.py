@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -21,7 +22,7 @@ from app.utils.pagination import PaginatedResponse
 router = APIRouter()
 
 
-@router.get("/notifications", response_model=PaginatedResponse[NotificationResponse], summary="Get notifications", description="List the current user's notifications.")
+@router.get("/notifications", summary="Get notifications", description="List the current user's notifications.")
 async def list_notifications(
     unread_only: bool = False,
     page: int = 1,

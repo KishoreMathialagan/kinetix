@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
@@ -32,7 +33,7 @@ async def upload_template(
         raise HTTPException(status_code=500, detail=f"Failed to upload consent template: {e!s}")
 
 
-@router.get("/consents", response_model=PaginatedResponse[ConsentFormResponse], summary="List consent forms", description="List consent forms, optionally filtered by patient.")
+@router.get("/consents", summary="List consent forms", description="List consent forms, optionally filtered by patient.")
 async def list_consents(
     patient_id: uuid.UUID | None = None,
     page: int = 1,

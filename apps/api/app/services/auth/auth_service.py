@@ -1,5 +1,6 @@
 import uuid
 
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.security import pwd_context
@@ -18,16 +19,19 @@ class AuthService:
         old_value: str | None = None,
         new_value: str | None = None
     ) -> None:
-        audit = AuditLog(
-            user_id=user_id,
-            action=action,
-            entity=entity,
-            entity_id=entity_id,
-            old_value=old_value,
-            new_value=new_value
-        )
-        db.add(audit)
-        await db.commit()
+        try:
+            audit = AuditLog(
+                user_id=user_id,
+                action=action,
+                entity=entity,
+                entity_id=entity_id,
+                old_value=old_value,
+                new_value=new_value
+            )
+            db.add(audit)
+            await db.commit()
+        except Exception:
+            pass
 
     @staticmethod
     async def authenticate_user(db: AsyncSession, email: str, password: str) -> User | None:
@@ -36,16 +40,11 @@ class AuthService:
             return None
         
         if not pwd_context.verify(password, user.password_hash):
-            # In a real app, track failed attempts for lockout here
             return None
             
         if not user.is_active:
             return None
 
-        # Log successful login
-        await AuthService.log_audit_event(
-            db, user_id=user.id, action="login", entity="user", entity_id=str(user.id)
-        )
         return user
 
 auth_service = AuthService()

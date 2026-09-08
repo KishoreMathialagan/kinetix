@@ -48,16 +48,24 @@ export default function AdminReportsPage() {
         setData(result)
         return
       }
-      const result = values.report_type === 'patient' && values.patient_id
-        ? await getPatientReport(values.patient_id)
-        : values.therapist_id
-          ? await getTherapistReport(values.therapist_id)
-          : null
-      if (!result) {
-        toast.error('Select the required record to generate the report')
+      if (values.report_type === 'patient') {
+        if (!values.patient_id) {
+          toast.error('Please select a patient to generate the report')
+          return
+        }
+        const result = await getPatientReport(values.patient_id)
+        setData(result)
         return
       }
-      setData(result)
+      if (values.report_type === 'therapist') {
+        if (!values.therapist_id) {
+          toast.error('Please select a therapist to generate the report')
+          return
+        }
+        const result = await getTherapistReport(values.therapist_id)
+        setData(result)
+        return
+      }
     } catch (error) {
       toast.error(toApiError(error).message)
     }

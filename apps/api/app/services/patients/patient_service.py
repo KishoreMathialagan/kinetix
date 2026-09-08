@@ -1,3 +1,4 @@
+from typing import Any
 import secrets
 import string
 import uuid
@@ -79,7 +80,7 @@ class PatientManagementService:
             await db.rollback()
             raise ValueError(f"Registration failed: {e!s}")
 
-    async def search_patients(self, db: AsyncSession, *, search_params: PatientSearchRequest, page: int, size: int) -> PaginatedResponse[Patient]:
+    async def search_patients(self, db: AsyncSession, *, search_params: PatientSearchRequest, page: int, size: int) -> PaginatedResponse[Any]:
         return await patient_repo.search(db, search_params=search_params, page=page, size=size)
 
 patient_management_service = PatientManagementService()

@@ -96,7 +96,9 @@ export default function AdminPatientDetailPage() {
     try {
       await archivePatient(params.id)
       toast.success('Patient archived')
+      setArchiveOpen(false)
       queryClient.invalidateQueries({ queryKey: ['patients'] })
+      router.push('/admin/patients')
     } catch (error) {
       toast.error(toApiError(error).message)
     }
@@ -266,6 +268,7 @@ export default function AdminPatientDetailPage() {
             onSuccess={() => {
               setEditOpen(false)
               queryClient.invalidateQueries({ queryKey: ['patients', params.id] })
+              queryClient.invalidateQueries({ queryKey: ['users', 'admin'] })
             }}
           />
         </DialogContent>

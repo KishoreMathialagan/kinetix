@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from sqlalchemy import func, select
@@ -28,7 +29,7 @@ class ConsentFormRepository(BaseRepository[ConsentForm]):
 
     async def list_forms(
         self, db: AsyncSession, *, patient_id: uuid.UUID | None = None, page: int = 1, size: int = 20
-    ) -> PaginatedResponse[ConsentForm]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(ConsentForm).where(ConsentForm.is_deleted == False)
         if patient_id:
             stmt = stmt.where(ConsentForm.patient_id == patient_id)

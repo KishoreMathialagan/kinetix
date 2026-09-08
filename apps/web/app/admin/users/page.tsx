@@ -63,7 +63,7 @@ export default function AdminUsersPage() {
               { key: 'verified', header: 'Verified', render: (u) => <span className="text-sm">{u.is_verified ? 'Yes' : 'No'}</span>, hideOnMobile: true },
               { key: 'created', header: 'Created', render: (u) => <span className="text-sm text-muted-foreground">{formatDate(u.created_at)}</span>, hideOnMobile: true },
               {
-                key: 'actions',
+                key: 'toggle',
                 header: 'Active',
                 render: (u) => (
                   <Switch checked={u.is_active} onCheckedChange={() => setDeactivateTarget(u)} aria-label={`Toggle ${u.first_name} ${u.last_name}`} />

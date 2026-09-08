@@ -1,15 +1,14 @@
+'use client'
+
 import type { Metadata } from 'next'
 import { RoleLayout } from '@/components/layout/role-layout'
 import { patientNavItems } from '@/components/layout/nav'
-
-export const metadata: Metadata = {
-  title: 'Patient',
-}
+import { ProfileGate } from '@/components/profile-gate'
 
 export default function PatientLayout({ children }: { children: React.ReactNode }) {
   return (
     <RoleLayout title="Patient" navItems={patientNavItems}>
-      {children}
+      <ProfileGate>{children}</ProfileGate>
     </RoleLayout>
   )
 }

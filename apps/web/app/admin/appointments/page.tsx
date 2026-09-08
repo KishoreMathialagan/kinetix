@@ -26,7 +26,7 @@ import { useNameLookup } from '@/lib/names'
 import { formatDate } from '@kinetix/utils'
 import type { Appointment, AppointmentStatus } from '@kinetix/shared-types'
 
-const statuses: (AppointmentStatus | '')[] = ['', 'scheduled', 'confirmed', 'in_progress', 'completed', 'cancelled', 'missed']
+const statuses: (AppointmentStatus | '_all')[] = ['_all', 'scheduled', 'confirmed', 'in_progress', 'completed', 'cancelled', 'missed']
 
 const statusVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   scheduled: 'secondary',
@@ -40,7 +40,7 @@ const statusVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'o
 export default function AdminAppointmentsPage() {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const [status, setStatus] = useState<AppointmentStatus | ''>('')
+  const [status, setStatus] = useState<AppointmentStatus | '_all'>('_all')
   const [page, setPage] = useState(1)
   const [createOpen, setCreateOpen] = useState(false)
   const { patientName, therapistName } = useNameLookup()
@@ -49,7 +49,7 @@ export default function AdminAppointmentsPage() {
     queryKey: ['appointments', 'admin', status, page],
     queryFn: () =>
       listAppointments({
-        appt_status: status || undefined,
+        appt_status: status !== '_all' ? status : undefined,
         page,
         size: 10,
       }),
@@ -111,14 +111,14 @@ export default function AdminAppointmentsPage() {
         }
       />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Select value={status} onValueChange={(v) => { setStatus(v as AppointmentStatus | ''); setPage(1) }}>
+        <Select value={status} onValueChange={(v) => { setStatus(v as AppointmentStatus | '_all'); setPage(1) }}>
           <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="All statuses" />
           </SelectTrigger>
           <SelectContent>
             {statuses.map((s) => (
               <SelectItem key={s} value={s}>
-                {s === '' ? 'All statuses' : s.replace(/_/g, ' ')}
+                {s === '_all' ? 'All statuses' : s.replace(/_/g, ' ')}
               </SelectItem>
             ))}
           </SelectContent>

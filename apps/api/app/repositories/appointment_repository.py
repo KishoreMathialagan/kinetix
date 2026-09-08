@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 from datetime import date, time
 
@@ -58,7 +59,7 @@ class AppointmentRepository(BaseRepository[Appointment]):
         end_date: date | None = None,
         page: int = 1, 
         size: int = 20
-    ) -> PaginatedResponse[Appointment]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(Appointment).where(Appointment.is_deleted == False)
         
         conditions = []

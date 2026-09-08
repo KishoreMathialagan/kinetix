@@ -1,6 +1,6 @@
 import uuid
 from datetime import date
-from typing import Annotated
+from typing import Any,  Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -36,7 +36,7 @@ async def create_appointment(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.get("", response_model=PaginatedResponse[AppointmentResponse], summary="Search appointments", description="Search appointments with filters and pagination.")
+@router.get("", summary="Search appointments", description="Search appointments with filters and pagination.")
 async def search_appointments(
     patient_id: uuid.UUID | None = None,
     therapist_id: uuid.UUID | None = None,

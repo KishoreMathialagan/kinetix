@@ -105,6 +105,8 @@ export default function AdminTherapistDetailPage() {
       toast.success('Therapist updated')
       setEditOpen(false)
       queryClient.invalidateQueries({ queryKey: ['therapists', params.id] })
+      queryClient.invalidateQueries({ queryKey: ['therapists', params.id, 'dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['users', 'admin'] })
     } catch (error) {
       toast.error(toApiError(error).message)
     }

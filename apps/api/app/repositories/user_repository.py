@@ -16,7 +16,11 @@ class UserRepository(BaseRepository[User]):
         stmt = (
             select(User)
             .where(User.email == email, User.is_deleted == False)
-            .options(selectinload(User.role).selectinload(Role.permissions))
+            .options(
+                selectinload(User.role).selectinload(Role.permissions),
+                selectinload(User.patient),
+                selectinload(User.therapist),
+            )
         )
         result = await db.execute(stmt)
         return result.scalar_one_or_none()
@@ -27,7 +31,15 @@ class UserRepository(BaseRepository[User]):
         return result.scalar_one_or_none()
         
     async def get_with_role(self, db: AsyncSession, *, id: uuid.UUID) -> User | None:
-        stmt = select(User).where(User.id == id, User.is_deleted == False).options(selectinload(User.role))
+        stmt = (
+            select(User)
+            .where(User.id == id, User.is_deleted == False)
+            .options(
+                selectinload(User.role).selectinload(Role.permissions),
+                selectinload(User.patient),
+                selectinload(User.therapist),
+            )
+        )
         result = await db.execute(stmt)
         return result.scalar_one_or_none()
 

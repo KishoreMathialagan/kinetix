@@ -1,3 +1,4 @@
+from typing import Any
 from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -36,7 +37,7 @@ async def system_statistics(
     }
 
 
-@router.get("/admin/audit-logs", response_model=PaginatedResponse[AuditLogResponse], summary="Audit logs", description="List audit log entries (admin only).")
+@router.get("/admin/audit-logs", summary="Audit logs", description="List audit log entries (admin only).")
 async def audit_logs(
     user_id=None,
     action: str | None = None,

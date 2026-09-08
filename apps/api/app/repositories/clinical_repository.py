@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from sqlalchemy import func, select
@@ -19,7 +20,7 @@ class AssessmentRepository(BaseRepository[Assessment]):
 
     async def list_by_patient(
         self, db: AsyncSession, *, patient_id: uuid.UUID, page: int = 1, size: int = 20
-    ) -> PaginatedResponse[Assessment]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(Assessment).where(
             Assessment.patient_id == patient_id, Assessment.is_deleted == False
         )
@@ -51,7 +52,7 @@ class TreatmentSessionRepository(BaseRepository[TreatmentSession]):
 
     async def list_by_patient(
         self, db: AsyncSession, *, patient_id: uuid.UUID, page: int = 1, size: int = 20
-    ) -> PaginatedResponse[TreatmentSession]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(TreatmentSession).where(
             TreatmentSession.patient_id == patient_id, TreatmentSession.is_deleted == False
         )

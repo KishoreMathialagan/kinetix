@@ -1,5 +1,5 @@
 import uuid
-from typing import Annotated
+from typing import Any,  Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,7 +18,7 @@ from app.utils.pagination import PaginatedResponse
 router = APIRouter()
 
 
-@router.get("", response_model=PaginatedResponse[AssessmentResponse], summary="List assessments", description="List assessments, optionally filtered by patient.")
+@router.get("", summary="List assessments", description="List assessments, optionally filtered by patient.")
 async def list_assessments(
     patient_id: uuid.UUID | None = None,
     page: int = 1,

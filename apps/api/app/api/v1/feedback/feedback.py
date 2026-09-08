@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -30,7 +31,7 @@ async def submit_feedback(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/feedback", response_model=PaginatedResponse[FeedbackResponse], summary="Get feedback", description="List feedback with optional patient/therapist filters.")
+@router.get("/feedback", summary="Get feedback", description="List feedback with optional patient/therapist filters.")
 async def list_feedback(
     patient_id: uuid.UUID | None = None,
     therapist_id: uuid.UUID | None = None,
@@ -44,7 +45,7 @@ async def list_feedback(
     )
 
 
-@router.get("/feedback/therapist/{therapist_id}", response_model=PaginatedResponse[FeedbackResponse], summary="Get therapist feedback", description="List all feedback for a therapist.")
+@router.get("/feedback/therapist/{therapist_id}", summary="Get therapist feedback", description="List all feedback for a therapist.")
 async def therapist_feedback(
     therapist_id: uuid.UUID,
     page: int = 1,

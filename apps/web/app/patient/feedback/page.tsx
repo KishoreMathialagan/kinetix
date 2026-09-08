@@ -15,6 +15,7 @@ import {
 } from '@kinetix/ui'
 import { PageHeader, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { Star, Send } from 'lucide-react'
 import { formatDate } from '@kinetix/utils'
 import { getMyPatientProfile } from '@/services/patients'
@@ -55,6 +56,10 @@ export default function PatientFeedbackPage() {
 
       {feedback.isPending ? (
         <Skeleton className="h-40" />
+      ) : feedback.isError ? (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load feedback. Please try again later.</AlertDescription>
+        </Alert>
       ) : myFeedback.length === 0 ? (
         <EmptyState icon={Star} title="No feedback yet" description="Share your experience with your therapist." />
       ) : (
@@ -89,7 +94,7 @@ export default function PatientFeedbackPage() {
               appointments={appointments.data?.items ?? []}
               onSuccess={() => {
                 setOpen(false)
-                queryClient.invalidateQueries({ queryKey: ['feedback'] })
+                queryClient.invalidateQueries({ queryKey: ['feedback', 'me'] })
                 toast.success('Thank you for your feedback!')
               }}
             />

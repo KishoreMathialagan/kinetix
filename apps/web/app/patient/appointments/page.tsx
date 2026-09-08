@@ -15,6 +15,7 @@ import {
   toast,
 } from '@kinetix/ui'
 import { PageHeader } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { DataTable, type DataTableColumn } from '@/components/data-table'
 import { StatusBadge } from '@/components/status-badge'
 import { listAppointments, rescheduleAppointment, cancelAppointment } from '@/services/appointments'
@@ -80,6 +81,11 @@ export default function PatientAppointmentsPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="My appointments" description="Booked sessions and treatment visits" />
+      {query.isError ? (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load appointments. Please try again later.</AlertDescription>
+        </Alert>
+      ) : (
       <DataTable<Appointment>
         columns={columns}
         rows={query.data?.items ?? []}
@@ -92,6 +98,7 @@ export default function PatientAppointmentsPage() {
         emptyTitle="No appointments"
         emptyDescription="You have no appointments yet."
       />
+      )}
 
       <Dialog open={action === 'reschedule'} onOpenChange={(o) => !o && setAction(null)}>
         <DialogContent>
@@ -100,6 +107,7 @@ export default function PatientAppointmentsPage() {
             <DialogDescription>Pick a new date and time.</DialogDescription>
           </DialogHeader>
           <RescheduleForm
+            key={target?.id ?? 'none'}
             appointment={target}
             submitting={submitting}
             onClose={() => setAction(null)}

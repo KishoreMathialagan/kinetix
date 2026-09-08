@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from fastapi import UploadFile
@@ -40,7 +41,7 @@ class ConsentService:
     @staticmethod
     async def list_forms(
         db: AsyncSession, *, patient_id: uuid.UUID | None = None, page: int = 1, size: int = 20
-    ) -> PaginatedResponse[ConsentForm]:
+    ) -> PaginatedResponse[Any]:
         return await consent_form_repo.list_forms(db, patient_id=patient_id, page=page, size=size)
 
     @staticmethod

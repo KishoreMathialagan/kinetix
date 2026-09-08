@@ -1,4 +1,5 @@
 import uuid
+from typing import Any
 
 from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,7 +25,7 @@ class PatientRepository(BaseRepository[Patient]):
 
     async def list_all(
         self, db: AsyncSession, *, page: int = 1, size: int = 20
-    ) -> PaginatedResponse[Patient]:
+    ) -> PaginatedResponse[Any]:
         stmt = (
             select(Patient)
             .where(Patient.is_deleted == False)
@@ -58,7 +59,7 @@ class PatientRepository(BaseRepository[Patient]):
         result = await db.execute(stmt)
         return result.scalar_one_or_none()
         
-    async def search(self, db: AsyncSession, *, search_params: PatientSearchRequest, page: int, size: int) -> PaginatedResponse[Patient]:
+    async def search(self, db: AsyncSession, *, search_params: PatientSearchRequest, page: int, size: int) -> PaginatedResponse[Any]:
         stmt = select(Patient).join(User).where(Patient.is_deleted == False).options(selectinload(Patient.user))
         
         conditions = []

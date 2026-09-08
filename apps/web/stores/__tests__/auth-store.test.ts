@@ -14,6 +14,8 @@ const user: UserMe = {
   is_active: true,
   patient_id: null,
   therapist_id: null,
+  profile_completed: false,
+  missing_fields: [],
   created_at: '2026-01-01T00:00:00Z',
 }
 

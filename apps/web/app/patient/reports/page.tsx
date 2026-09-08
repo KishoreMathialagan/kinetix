@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { PageHeader, EmptyState, StatCard } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { FileText, TrendingUp, HeartPulse, ClipboardCheck, Dumbbell, CalendarClock } from 'lucide-react'
 import { formatDate } from '@kinetix/utils'
 import { getMyPatientProfile } from '@/services/patients'
@@ -65,6 +66,10 @@ export default function PatientReportsPage() {
 
       {report.isPending ? (
         <Skeleton className="h-64" />
+      ) : report.isError ? (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load report. Please try again later.</AlertDescription>
+        </Alert>
       ) : !data ? (
         <EmptyState icon={FileText} title="No report available" description="Your treatment report will appear after your first session." />
       ) : (

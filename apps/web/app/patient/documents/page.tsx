@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { PageHeader, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { Button } from '@kinetix/ui'
 import {
   Dialog,
@@ -35,13 +36,17 @@ export default function PatientDocumentsPage() {
   const refresh = () => queryClient.invalidateQueries({ queryKey: ['documents', patientId] })
 
   const download = async (documentId: string, fileName: string) => {
-    const blob = await downloadDocument(documentId)
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = fileName
-    a.click()
-    URL.revokeObjectURL(url)
+    try {
+      const blob = await downloadDocument(documentId)
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+      a.click()
+      setTimeout(() => URL.revokeObjectURL(url), 5000)
+    } catch {
+      toast.error('Could not download document')
+    }
   }
 
   return (
@@ -60,6 +65,10 @@ export default function PatientDocumentsPage() {
 
       {documents.isPending ? (
         <Skeleton className="h-40" />
+      ) : documents.isError ? (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load documents. Please try again later.</AlertDescription>
+        </Alert>
       ) : !documents.data || documents.data.length === 0 ? (
         <EmptyState icon={FileText} title="No documents" description="Documents shared by your care team will appear here." />
       ) : (

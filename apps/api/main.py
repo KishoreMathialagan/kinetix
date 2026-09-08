@@ -25,7 +25,7 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting up application...")
     
-    # Pre-init redis so it's ready
+    # Pre-init redis so it's ready (optional - app works without it)
     await RedisManager.get_client()
     
     yield

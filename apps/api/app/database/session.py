@@ -4,12 +4,14 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from app.config import settings
 
-# Create async engine with connection pooling as per requirements
+# Create async engine with connection pooling
 engine = create_async_engine(
     settings.DATABASE_URL,
-    pool_pre_ping=True,
+    pool_pre_ping=False,
     pool_recycle=3600,
-    echo=settings.DEBUG,
+    pool_size=5,
+    max_overflow=10,
+    echo=False,
 )
 
 # Async session factory

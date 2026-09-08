@@ -78,6 +78,8 @@ export default function AdminAppointmentDetailPage() {
       await fn()
       toast.success(action === 'complete' ? 'Appointment completed' : 'Appointment cancelled')
       queryClient.invalidateQueries({ queryKey: ['appointments'] })
+      queryClient.invalidateQueries({ queryKey: ['appointments', params.id] })
+      setCancelReason('')
     } catch (error) {
       toast.error(toApiError(error).message)
     } finally {
@@ -92,6 +94,8 @@ export default function AdminAppointmentDetailPage() {
       await manualAssign(appointment.patient_id, { therapist_id: therapistId, reason: `Assigned from appointment ${appointment.id}` })
       toast.success('Therapist assigned to patient')
       setAssignOpen(false)
+      queryClient.invalidateQueries({ queryKey: ['appointments'] })
+      queryClient.invalidateQueries({ queryKey: ['appointments', params.id] })
       queryClient.invalidateQueries({ queryKey: ['assignments'] })
     } catch (error) {
       toast.error(toApiError(error).message)
@@ -120,9 +124,11 @@ export default function AdminAppointmentDetailPage() {
                   <XCircle className="mr-2 h-4 w-4" /> Cancel
                 </Button>
               )}
-              <Button onClick={() => setAssignOpen(true)}>
-                <UserCheck className="mr-2 h-4 w-4" /> Assign therapist
-              </Button>
+              {appointment && !['completed', 'cancelled', 'missed'].includes(appointment.status) && (
+                <Button onClick={() => setAssignOpen(true)}>
+                  <UserCheck className="mr-2 h-4 w-4" /> Assign therapist
+                </Button>
+              )}
             </>
           }
         />

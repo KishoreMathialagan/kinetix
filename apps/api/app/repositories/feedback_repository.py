@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from sqlalchemy import func, select
@@ -20,7 +21,7 @@ class FeedbackRepository(BaseRepository[Feedback]):
         therapist_id: uuid.UUID | None = None,
         page: int = 1,
         size: int = 20,
-    ) -> PaginatedResponse[Feedback]:
+    ) -> PaginatedResponse[Any]:
         stmt = select(Feedback).where(Feedback.is_deleted == False)
         if patient_id:
             stmt = stmt.where(Feedback.patient_id == patient_id)

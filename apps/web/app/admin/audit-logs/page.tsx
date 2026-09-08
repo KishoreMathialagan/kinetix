@@ -9,17 +9,17 @@ import { listAuditLogs } from '@/services/admin'
 import { formatDateTime } from '@kinetix/utils'
 import type { AuditLog } from '@kinetix/shared-types'
 
-const entities = ['', 'patient', 'therapist', 'appointment', 'user', 'invoice', 'consent', 'document', 'feedback', 'exercise', 'settings'] as const
+const entities = ['_all', 'patient', 'therapist', 'appointment', 'user', 'invoice', 'consent', 'document', 'feedback', 'exercise', 'settings'] as const
 
 export default function AdminAuditLogsPage() {
-  const [entity, setEntity] = useState<string>('')
+  const [entity, setEntity] = useState<string>('_all')
   const [page, setPage] = useState(1)
 
   const query = useQuery({
     queryKey: ['audit-logs', entity, page],
     queryFn: () =>
       listAuditLogs({
-        entity_type: entity || undefined,
+        entity_type: entity !== '_all' ? entity : undefined,
         page,
         size: 20,
       }),
@@ -36,7 +36,7 @@ export default function AdminAuditLogsPage() {
           <SelectContent>
             {entities.map((e) => (
               <SelectItem key={e} value={e}>
-                {e === '' ? 'All entities' : e}
+                {e === '_all' ? 'All entities' : e}
               </SelectItem>
             ))}
           </SelectContent>

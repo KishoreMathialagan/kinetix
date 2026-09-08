@@ -1,3 +1,4 @@
+from typing import Any
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -26,7 +27,7 @@ from app.utils.pagination import PaginatedResponse, paginate
 router = APIRouter()
 
 
-@router.get("/billing", response_model=PaginatedResponse[InvoiceResponse], summary="List invoices", description="List invoices with optional filters. Patients and therapists only see their own scope.")
+@router.get("/billing", summary="List invoices", description="List invoices with optional filters. Patients and therapists only see their own scope.")
 async def list_invoices(
     status_filter: InvoiceStatus | None = None,
     patient_id: uuid.UUID | None = None,
@@ -137,7 +138,7 @@ async def record_payment(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/payments", response_model=PaginatedResponse[PaymentResponse], summary="List payments", description="List payments. Admins see all; scope to an invoice with ?invoice_id=.")
+@router.get("/payments", summary="List payments", description="List payments. Admins see all; scope to an invoice with ?invoice_id=.")
 async def list_payments(
     invoice_id: uuid.UUID | None = None,
     page: int = 1,

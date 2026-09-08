@@ -10,6 +10,7 @@ export interface TokenResponse {
   refresh_token: string;
   token_type: string;
   expires_in: number;
+  user?: UserMe;
 }
 
 export interface RefreshTokenRequest {
@@ -60,6 +61,8 @@ export interface UserMe {
   is_active: boolean;
   patient_id: string | null;
   therapist_id: string | null;
+  profile_completed: boolean;
+  missing_fields: string[];
   created_at: string;
 }
 

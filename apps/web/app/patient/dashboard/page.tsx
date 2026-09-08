@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { PageHeader, StatCard, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { Button } from '@kinetix/ui'
 import { CalendarClock, Dumbbell, ClipboardCheck, Bell, HeartPulse, Star, Stethoscope, UserX } from 'lucide-react'
 import { formatDate, formatTime } from '@kinetix/utils'
@@ -48,6 +49,10 @@ export default function PatientDashboardPage() {
           <Skeleton className="h-28" />
           <Skeleton className="h-28" />
         </div>
+      ) : stats.isError ? (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load dashboard data. Please try again later.</AlertDescription>
+        </Alert>
       ) : (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <StatCard icon={CalendarClock} label="Upcoming appointments" value={stats.data?.upcoming_appointments ?? 0} />

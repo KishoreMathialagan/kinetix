@@ -15,6 +15,7 @@ class TokenResponse(BaseModel):
     refresh_token: str
     token_type: str = "bearer"
     expires_in: int
+    user: "UserMeResponse | None" = None
 
 class RefreshTokenRequest(BaseModel):
     refresh_token: str
@@ -58,6 +59,8 @@ class UserMeResponse(BaseModel):
     is_active: bool
     patient_id: uuid.UUID | None = None
     therapist_id: uuid.UUID | None = None
+    profile_completed: bool = False
+    missing_fields: list[str] = []
     created_at: datetime
 
     class Config:

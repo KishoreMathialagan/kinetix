@@ -15,6 +15,7 @@ import {
 } from '@kinetix/ui'
 import { PageHeader, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { FileCheck2, PenLine } from 'lucide-react'
 import { formatDate } from '@kinetix/utils'
 import { getMyPatientProfile } from '@/services/patients'
@@ -35,7 +36,7 @@ export default function PatientConsentsPage() {
     enabled: !!patientId,
   })
 
-  const refresh = () => queryClient.invalidateQueries({ queryKey: ['consents'] })
+  const refresh = () => queryClient.invalidateQueries({ queryKey: ['consents', patientId] })
 
   return (
     <div className="space-y-6">
@@ -43,6 +44,10 @@ export default function PatientConsentsPage() {
 
       {consents.isPending ? (
         <Skeleton className="h-40" />
+      ) : consents.isError ? (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load consent forms. Please try again later.</AlertDescription>
+        </Alert>
       ) : !consents.data || consents.data.length === 0 ? (
         <EmptyState icon={FileCheck2} title="No consent forms" description="Consent forms from your care team will appear here." />
       ) : (
