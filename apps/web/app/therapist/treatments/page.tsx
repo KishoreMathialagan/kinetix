@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useMemo, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -22,7 +22,8 @@ import {
 } from '@kinetix/ui'
 import { PageHeader, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
-import { Plus, FileHeart, ClipboardCheck, Dumbbell, TrendingUp, Trash2 } from 'lucide-react'
+import { Alert, AlertDescription } from '@kinetix/ui'
+import { Plus, FileHeart, ClipboardCheck, Dumbbell, TrendingUp, Trash2, AlertCircle } from 'lucide-react'
 import { formatDate } from '@kinetix/utils'
 import { listAppointments } from '@/services/appointments'
 import { listAssessments, createInitialAssessment, createWeeklyAssessment, createFinalAssessment } from '@/services/assessments'
@@ -48,6 +49,14 @@ const tabs: { id: Tab; label: string }[] = [
 ]
 
 export default function TherapistTreatmentsPage() {
+  return (
+    <Suspense fallback={<div className="space-y-6"><Skeleton className="h-64" /></div>}>
+      <TherapistTreatmentsContent />
+    </Suspense>
+  )
+}
+
+function TherapistTreatmentsContent() {
   const searchParams = useSearchParams()
   const presetPatient = searchParams.get('patient')
   const [patientId, setPatientId] = useState<string>(presetPatient ?? '')
@@ -111,6 +120,8 @@ export default function TherapistTreatmentsPage() {
     setCreateOpen(true)
   }
 
+  const error = profile.error || appointments.error
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -124,6 +135,12 @@ export default function TherapistTreatmentsPage() {
           )
         }
       />
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>Failed to load care data. Please try again later.</AlertDescription>
+        </Alert>
+      )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <Select value={patientId} onValueChange={(v) => { setPatientId(v); setTab('plans') }}>

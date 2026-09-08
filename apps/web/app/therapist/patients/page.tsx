@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Input, PageHeader } from '@kinetix/ui'
 import { Search, UserRound, ChevronRight } from 'lucide-react'
 import { Skeleton } from '@kinetix/ui'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { formatDate } from '@kinetix/utils'
 import { globalSearch } from '@/services/search'
 import { listAppointments } from '@/services/appointments'
@@ -37,6 +38,8 @@ export default function TherapistPatientsPage() {
     enabled: !!therapistId,
   })
 
+  const error = profile.error || appointments.error
+
   const myPatients = appointments.data
     ? Array.from(
         new Map(appointments.data.items.map((a) => [a.patient_id, a])).values()
@@ -46,6 +49,11 @@ export default function TherapistPatientsPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Patients" description="Find patients and review care records" />
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>Failed to load patient data. Please try again later.</AlertDescription>
+        </Alert>
+      )}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input

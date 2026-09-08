@@ -6,7 +6,8 @@ import { useQuery } from '@tanstack/react-query'
 import { PageHeader } from '@kinetix/ui'
 import { Badge } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
-import { CalendarClock, ClipboardCheck, Dumbbell, FileHeart } from 'lucide-react'
+import { Alert, AlertDescription } from '@kinetix/ui'
+import { CalendarClock, ClipboardCheck, Dumbbell, FileHeart, AlertCircle } from 'lucide-react'
 import { formatDate } from '@kinetix/utils'
 import { getPatient } from '@/services/patients'
 import { listAppointments } from '@/services/appointments'
@@ -57,6 +58,12 @@ export default function TherapistPatientDetailPage() {
         title={patient.data ? `Patient ${patient.data.patient_code}` : 'Patient'}
         description="Care record"
       />
+      {patient.error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>Failed to load patient data. Please try again later.</AlertDescription>
+        </Alert>
+      )}
 
       {patient.isPending ? (
         <Skeleton className="h-40" />

@@ -21,7 +21,8 @@ import {
 } from '@kinetix/ui'
 import { PageHeader, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
-import { CalendarClock, Clock, PencilLine, Plane } from 'lucide-react'
+import { Alert, AlertDescription } from '@kinetix/ui'
+import { CalendarClock, Clock, PencilLine, Plane, AlertCircle } from 'lucide-react'
 import { formatDate } from '@kinetix/utils'
 import {
   getMyTherapistProfile,
@@ -91,6 +92,11 @@ export default function TherapistProfilePage() {
 
       {profile.isPending ? (
         <Skeleton className="h-64" />
+      ) : profile.error ? (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>Failed to load profile. Please try again later.</AlertDescription>
+        </Alert>
       ) : (
         <>
           <section className="glass-panel p-5">

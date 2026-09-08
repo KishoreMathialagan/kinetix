@@ -20,7 +20,8 @@ import {
   toast,
 } from '@kinetix/ui'
 import { PageHeader } from '@kinetix/ui'
-import { Play, Square, CalendarClock, XCircle, CalendarDays } from 'lucide-react'
+import { Play, Square, CalendarClock, XCircle, CalendarDays, AlertCircle } from 'lucide-react'
+import { Alert, AlertDescription } from '@kinetix/ui'
 import { DataTable, type DataTableColumn } from '@/components/data-table'
 import { StatusBadge } from '@/components/status-badge'
 import { listAppointments, rescheduleAppointment, cancelAppointment, completeAppointment } from '@/services/appointments'
@@ -30,13 +31,13 @@ import { formatDate } from '@kinetix/utils'
 import type { Appointment, AppointmentStatus } from '@kinetix/shared-types'
 import { Skeleton } from '@kinetix/ui'
 
-const statuses: (AppointmentStatus | '')[] = ['', 'scheduled', 'confirmed', 'in_progress', 'completed', 'cancelled', 'missed']
+const statuses: (AppointmentStatus | '_all')[] = ['_all', 'scheduled', 'confirmed', 'in_progress', 'completed', 'cancelled', 'missed']
 
 type Action = 'start' | 'end' | 'reschedule' | 'cancel' | null
 
 export default function TherapistAppointmentsPage() {
   const queryClient = useQueryClient()
-  const [status, setStatus] = useState<AppointmentStatus | ''>('')
+  const [status, setStatus] = useState<AppointmentStatus | '_all'>('_all')
   const [page, setPage] = useState(1)
   const [action, setAction] = useState<Action>(null)
   const [target, setTarget] = useState<Appointment | null>(null)
@@ -51,7 +52,7 @@ export default function TherapistAppointmentsPage() {
     queryFn: () =>
       listAppointments({
         therapist_id: therapistId,
-        appt_status: status || undefined,
+        appt_status: status === '_all' ? undefined : status,
         page,
         size: 10,
       }),
@@ -163,18 +164,26 @@ export default function TherapistAppointmentsPage() {
     },
   ]
 
+  const error = profile.error || query.error
+
   return (
     <div className="space-y-6">
       <PageHeader title="My appointments" description="View and run patient sessions" />
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>Failed to load appointments. Please try again later.</AlertDescription>
+        </Alert>
+      )}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Select value={status} onValueChange={(v) => { setStatus(v as AppointmentStatus | ''); setPage(1) }}>
+        <Select value={status} onValueChange={(v) => { setStatus(v as AppointmentStatus | '_all'); setPage(1) }}>
           <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="All statuses" />
           </SelectTrigger>
           <SelectContent>
             {statuses.map((s) => (
               <SelectItem key={s} value={s}>
-                {s === '' ? 'All statuses' : s.replace(/_/g, ' ')}
+                {s === '_all' ? 'All statuses' : s.replace(/_/g, ' ')}
               </SelectItem>
             ))}
           </SelectContent>
@@ -192,7 +201,7 @@ export default function TherapistAppointmentsPage() {
         keyField={(a) => a.id}
         emptyTitle="No appointments found"
         emptyDescription={
-          query.data && query.data.total === 0 && !status
+          query.data && query.data.total === 0 && status === '_all'
             ? 'You have no appointments yet.'
             : 'Try changing the status filter.'
         }

@@ -9,7 +9,6 @@ import {
   UserCog,
   Settings,
   HeartPulse,
-  ClipboardList,
   Dumbbell,
   TrendingUp,
 } from 'lucide-react'
@@ -41,9 +40,4 @@ export const patientNavItems: NavItem[] = [
   { label: 'Progress', href: '/patient/progress', icon: TrendingUp },
   { label: 'Reports', href: '/patient/reports', icon: FileText },
   { label: 'Profile', href: '/patient/profile', icon: Settings },
-]
-
-export const therapistExtraNavItems: NavItem[] = [
-  { label: 'Assessments', href: '/therapist/assessments', icon: ClipboardList },
-  { label: 'Exercise Plans', href: '/therapist/exercises', icon: Dumbbell },
 ]

@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { PageHeader, StatCard, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
 import { Button } from '@kinetix/ui'
-import { CalendarClock, ListChecks, ClipboardCheck, Star, Stethoscope, UserRound } from 'lucide-react'
+import { Alert, AlertDescription } from '@kinetix/ui'
+import { CalendarClock, ListChecks, ClipboardCheck, Star, Stethoscope, UserRound, AlertCircle } from 'lucide-react'
 import { formatDate, formatTime } from '@kinetix/utils'
 import { getTherapistDashboard } from '@/services/dashboards'
 import { getMyTherapistProfile, getTherapistDashboardById } from '@/services/therapists'
@@ -27,10 +28,17 @@ export default function TherapistDashboardPage() {
   })
 
   const pending = profile.isPending || stats.isPending
+  const error = profile.error || stats.error
 
   return (
     <div className="space-y-6">
       <PageHeader title="Dashboard" description="Your day at a glance" />
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>Failed to load dashboard data. Please try again later.</AlertDescription>
+        </Alert>
+      )}
       {pending ? (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <Skeleton className="h-28" />

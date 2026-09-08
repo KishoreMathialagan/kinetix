@@ -3,6 +3,7 @@ from collections.abc import Callable
 from typing import Annotated, Any
 
 from fastapi import Depends, HTTPException, Request, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.session import get_db
@@ -24,7 +25,8 @@ def require_ownership(
     * an admin, or
     * the patient referenced by ``resource.patient_id``, or
     * the therapist referenced by ``resource.therapist_id``, or
-    * the owner of the profile resource (e.g. ``Patient``/``Therapist``) itself.
+    * the owner of the profile resource (e.g. ``Patient``/``Therapist``) itself,
+    * a therapist who has an appointment with the patient.
 
     The route still needs role dependencies where roles should be enforced.
     """
@@ -77,6 +79,17 @@ def require_ownership(
         therapist = await therapist_repo.get_by_user_id(db, user_id=current_user.id)
         if therapist and therapist.id in owner_ids:
             return current_user
+
+        if therapist is not None:
+            from app.models.clinical import Appointment
+            has_appointment = await db.execute(
+                select(Appointment.id).where(
+                    Appointment.therapist_id == therapist.id,
+                    Appointment.patient_id == resource_id,
+                ).limit(1)
+            )
+            if has_appointment.scalar_one_or_none() is not None:
+                return current_user
 
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
