@@ -44,7 +44,7 @@ class AssignmentRecommendationEngine:
         therapists = await therapist_repo.search(db, size=100) # Arbitrary limit for now
         
         recommendations = []
-        for therapist in therapists.items:
+        for therapist in therapists["items"]:
             score = 0.0
             reasons = []
             

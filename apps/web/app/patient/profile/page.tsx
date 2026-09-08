@@ -247,8 +247,8 @@ function PatientProfileForm({ initial, onSubmit }: {
   onSubmit: (payload: PatientUpdateRequest) => Promise<void>
 }) {
   const [dob, setDob] = useState(initial.dob ?? '')
-  const [gender, setGender] = useState<Gender | ''>(initial.gender ?? '')
-  const [bloodGroup, setBloodGroup] = useState(initial.blood_group ?? '')
+  const [gender, setGender] = useState<Gender | '_none'>(initial.gender ? (initial.gender as Gender) : '_none')
+  const [bloodGroup, setBloodGroup] = useState(initial.blood_group || '_none')
   const [occupation, setOccupation] = useState(initial.occupation ?? '')
   const [address, setAddress] = useState(initial.address ?? '')
   const [city, setCity] = useState(initial.city ?? '')
@@ -259,7 +259,7 @@ function PatientProfileForm({ initial, onSubmit }: {
   const [bloodPressure, setBloodPressure] = useState(initial.blood_pressure ?? '')
   const [temperatureSpo2, setTemperatureSpo2] = useState(initial.temperature_spo2 ?? '')
   const [emergencyContact, setEmergencyContact] = useState(initial.emergency_contact ?? '')
-  const [emergencyContactRelationship, setEmergencyContactRelationship] = useState(initial.emergency_contact_relationship ?? '')
+  const [emergencyContactRelationship, setEmergencyContactRelationship] = useState(initial.emergency_contact_relationship || '_none')
   const [emergencyPhone, setEmergencyPhone] = useState(initial.emergency_phone ?? '')
   const [emergencyContactAddress, setEmergencyContactAddress] = useState(initial.emergency_contact_address ?? '')
   const [primaryConcern, setPrimaryConcern] = useState<string[]>(() => {
@@ -298,8 +298,8 @@ function PatientProfileForm({ initial, onSubmit }: {
       }
       await onSubmit({
         dob: dob || null,
-        gender: gender || null,
-        blood_group: (bloodGroup || null) as PatientUpdateRequest['blood_group'],
+        gender: gender === '_none' ? null : gender || null,
+        blood_group: (bloodGroup === '_none' ? null : bloodGroup || null) as PatientUpdateRequest['blood_group'],
         occupation: occupation || null,
         address: address || null,
         city: city || null,
@@ -310,7 +310,7 @@ function PatientProfileForm({ initial, onSubmit }: {
         blood_pressure: bloodPressure || null,
         temperature_spo2: temperatureSpo2 || null,
         emergency_contact: emergencyContact || null,
-        emergency_contact_relationship: emergencyContactRelationship || null,
+        emergency_contact_relationship: emergencyContactRelationship === '_none' ? null : emergencyContactRelationship || null,
         emergency_phone: emergencyPhone || null,
         emergency_contact_address: emergencyContactAddress || null,
         primary_concern: allConcerns.length ? allConcerns.join(', ') : null,
@@ -340,9 +340,10 @@ function PatientProfileForm({ initial, onSubmit }: {
           </div>
           <div className="space-y-2">
             <Label>Gender</Label>
-            <Select value={gender} onValueChange={(v) => setGender(v as Gender)}>
+            <Select value={gender} onValueChange={(v) => setGender(v as Gender | '_none')}>
               <SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger>
               <SelectContent>
+                <SelectItem value="_none">Select gender</SelectItem>
                 {GENDER_OPTIONS.map((g) => (
                   <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>
                 ))}
@@ -354,6 +355,7 @@ function PatientProfileForm({ initial, onSubmit }: {
             <Select value={bloodGroup} onValueChange={setBloodGroup}>
               <SelectTrigger><SelectValue placeholder="Select blood group" /></SelectTrigger>
               <SelectContent>
+                <SelectItem value="_none">Select blood group</SelectItem>
                 {BLOOD_GROUP_OPTIONS.map((bg) => (
                   <SelectItem key={bg} value={bg}>{bg}</SelectItem>
                 ))}
@@ -425,6 +427,7 @@ function PatientProfileForm({ initial, onSubmit }: {
             <Select value={emergencyContactRelationship} onValueChange={setEmergencyContactRelationship}>
               <SelectTrigger><SelectValue placeholder="Select relationship" /></SelectTrigger>
               <SelectContent>
+                <SelectItem value="_none">Select relationship</SelectItem>
                 {RELATIONSHIP_OPTIONS.map((r) => (
                   <SelectItem key={r} value={r}>{r}</SelectItem>
                 ))}

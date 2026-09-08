@@ -20,7 +20,7 @@ import {
   toast,
 } from '@kinetix/ui'
 import { PageHeader } from '@kinetix/ui'
-import { Play, Square, CalendarClock, XCircle, CalendarDays, AlertCircle } from 'lucide-react'
+import { Play, Square, XCircle, CalendarDays, AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription } from '@kinetix/ui'
 import { DataTable, type DataTableColumn } from '@/components/data-table'
 import { StatusBadge } from '@/components/status-badge'

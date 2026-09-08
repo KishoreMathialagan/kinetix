@@ -1,6 +1,5 @@
 'use client'
 
-import type { Metadata } from 'next'
 import { RoleLayout } from '@/components/layout/role-layout'
 import { patientNavItems } from '@/components/layout/nav'
 import { ProfileGate } from '@/components/profile-gate'

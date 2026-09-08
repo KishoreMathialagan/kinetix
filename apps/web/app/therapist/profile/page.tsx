@@ -149,14 +149,18 @@ export default function TherapistProfilePage() {
                         variant="ghost"
                         onClick={async () => {
                           if (!therapistId) return
-                          await updateAvailability(therapistId, a.id, {
-                            weekday: a.weekday,
-                            specific_date: a.specific_date,
-                            start_time: a.start_time,
-                            end_time: a.end_time,
-                            is_available: !a.is_available,
-                          })
-                          refreshAvailability()
+                          try {
+                            await updateAvailability(therapistId, a.id, {
+                              weekday: a.weekday,
+                              specific_date: a.specific_date,
+                              start_time: a.start_time,
+                              end_time: a.end_time,
+                              is_available: !a.is_available,
+                            })
+                            refreshAvailability()
+                          } catch {
+                            toast.error('Could not update availability')
+                          }
                         }}
                       >
                         Toggle
@@ -268,6 +272,8 @@ function ProfileForm({ initial, onSubmit }: {
         capacity: capacity ? Number(capacity) : null,
         status,
       })
+    } catch {
+      toast.error('Could not update profile')
     } finally {
       setSubmitting(false)
     }

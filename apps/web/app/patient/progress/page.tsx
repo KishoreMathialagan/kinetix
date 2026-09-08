@@ -70,6 +70,10 @@ export default function PatientProgressPage() {
             <h2 className="mb-3 font-semibold">Measurements</h2>
             {measurements.isPending ? (
               <Skeleton className="h-24" />
+            ) : measurements.isError ? (
+              <Alert variant="destructive">
+                <AlertDescription>Failed to load measurements.</AlertDescription>
+              </Alert>
             ) : !measurements.data || measurements.data.length === 0 ? (
               <EmptyState icon={TrendingUp} title="No measurements yet" description="Your therapist will record measurements during sessions." />
             ) : (

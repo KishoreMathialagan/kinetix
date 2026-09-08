@@ -51,8 +51,8 @@ class ProgressService:
             db, patient_id=patient_id, page=1, size=1
         )
         goals = None
-        if assessments.items:
-            latest = assessments.items[0]
+        if assessments["items"]:
+            latest = assessments["items"][0]
             goals = latest.goals
 
         return ProgressOverview(
@@ -61,7 +61,7 @@ class ProgressService:
             rom_trend=_trend(measurements, "rom_degrees"),
             strength_trend=_trend(measurements, "strength_scale"),
             goals=goals,
-            session_timeline=[TreatmentSessionResponse.model_validate(s) for s in sessions.items],
+            session_timeline=[TreatmentSessionResponse.model_validate(s) for s in sessions["items"]],
         )
 
 

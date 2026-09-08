@@ -143,11 +143,12 @@ function TherapistTreatmentsContent() {
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Select value={patientId} onValueChange={(v) => { setPatientId(v); setTab('plans') }}>
+        <Select value={patientId || '_none'} onValueChange={(v) => { setPatientId(v === '_none' ? '' : v); setTab('plans') }}>
           <SelectTrigger className="w-full sm:w-72">
             <SelectValue placeholder="Select a patientâ€¦" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="_none">Select a patientâ€¦</SelectItem>
             {myPatients.map((a) => (
               <SelectItem key={a.patient_id} value={a.patient_id}>
                 Patient #{a.patient_id.slice(0, 8)}
@@ -370,10 +371,14 @@ function TherapistTreatmentsContent() {
         confirmLabel="Delete"
         onConfirm={async () => {
           if (!deleteProgramId) return
-          await deleteProgram(deleteProgramId)
-          setDeleteProgramId(null)
-          queryClient.invalidateQueries({ queryKey: ['programs'] })
-          toast.success('Program deleted')
+          try {
+            await deleteProgram(deleteProgramId)
+            setDeleteProgramId(null)
+            queryClient.invalidateQueries({ queryKey: ['programs'] })
+            toast.success('Program deleted')
+          } catch {
+            toast.error('Could not delete program')
+          }
         }}
       />
     </div>
@@ -431,9 +436,10 @@ function PlanForm({ patientId, assessments, onSuccess }: {
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>Assessment</Label>
-        <Select value={assessmentId} onValueChange={setAssessmentId}>
+        <Select value={assessmentId || '_none'} onValueChange={(v) => setAssessmentId(v === '_none' ? '' : v)}>
           <SelectTrigger><SelectValue placeholder="Select assessment" /></SelectTrigger>
           <SelectContent>
+            <SelectItem value="_none">Select assessment</SelectItem>
             {assessments.map((a) => (
               <SelectItem key={a.id} value={a.id}>{a.assessment_type}</SelectItem>
             ))}
@@ -516,9 +522,10 @@ function AssessmentForm({ patientId, therapistId, appointments, onSuccess }: {
       </div>
       <div className="space-y-2">
         <Label>Appointment</Label>
-        <Select value={appointmentId} onValueChange={setAppointmentId}>
+        <Select value={appointmentId || '_none'} onValueChange={(v) => setAppointmentId(v === '_none' ? '' : v)}>
           <SelectTrigger><SelectValue placeholder="Select appointment" /></SelectTrigger>
           <SelectContent>
+            <SelectItem value="_none">Select appointment</SelectItem>
             {appointments.map((a) => (
               <SelectItem key={a.id} value={a.id}>{formatDate(a.scheduled_date)}</SelectItem>
             ))}
@@ -690,9 +697,10 @@ function MeasurementForm({ patientId, therapistId, onSuccess }: {
       </div>
       <div className="space-y-2">
         <Label>Strength (0â€“5)</Label>
-        <Select value={strength} onValueChange={(v) => setStrength(v as StrengthScale)}>
+        <Select value={strength || '_none'} onValueChange={(v) => setStrength(v === '_none' ? '' : v as StrengthScale)}>
           <SelectTrigger><SelectValue placeholder="Select strength" /></SelectTrigger>
           <SelectContent>
+            <SelectItem value="_none">Select strength</SelectItem>
             {['0', '1', '2', '3', '4', '5'].map((s) => (
               <SelectItem key={s} value={s}>{s}</SelectItem>
             ))}

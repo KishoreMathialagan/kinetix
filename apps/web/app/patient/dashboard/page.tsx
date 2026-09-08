@@ -6,7 +6,7 @@ import { PageHeader, StatCard, EmptyState } from '@kinetix/ui'
 import { Skeleton } from '@kinetix/ui'
 import { Alert, AlertDescription } from '@kinetix/ui'
 import { Button } from '@kinetix/ui'
-import { CalendarClock, Dumbbell, ClipboardCheck, Bell, HeartPulse, Star, Stethoscope, UserX } from 'lucide-react'
+import { CalendarClock, Dumbbell, ClipboardCheck, Bell, HeartPulse, Star, Stethoscope, UserX, AlertCircle } from 'lucide-react'
 import { formatDate, formatTime } from '@kinetix/utils'
 import { getPatientDashboard } from '@/services/dashboards'
 import { getMyPatientProfile } from '@/services/patients'
@@ -28,6 +28,7 @@ export default function PatientDashboardPage() {
 
   const firstName = profile.data?.user.first_name
   const isPending = profile.isPending || stats.isPending
+  const error = profile.error || stats.error
 
   return (
     <div className="space-y-6">
@@ -42,6 +43,12 @@ export default function PatientDashboardPage() {
           </Button>
         }
       />
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>Failed to load dashboard data. Please try again later.</AlertDescription>
+        </Alert>
+      )}
       {isPending ? (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <Skeleton className="h-28" />

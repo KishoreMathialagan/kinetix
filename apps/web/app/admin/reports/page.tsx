@@ -136,11 +136,12 @@ export default function AdminReportsPage() {
               {reportType === 'patient' && (
                 <div className="space-y-2">
                   <Label>Patient</Label>
-                  <Select value={patientId ?? ''} onValueChange={(v) => setValue('patient_id', v)}>
+                  <Select value={patientId || '_none'} onValueChange={(v) => setValue('patient_id', v === '_none' ? undefined : v)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select patient" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="_none">Select patient</SelectItem>
                       {patientsQuery.data?.items.map((p) => (
                         <SelectItem key={p.id} value={p.id}>
                           {patientName(p.id)}
@@ -153,11 +154,12 @@ export default function AdminReportsPage() {
               {reportType === 'therapist' && (
                 <div className="space-y-2">
                   <Label>Therapist</Label>
-                  <Select value={therapistId ?? ''} onValueChange={(v) => setValue('therapist_id', v)}>
+                  <Select value={therapistId || '_none'} onValueChange={(v) => setValue('therapist_id', v === '_none' ? undefined : v)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select therapist" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="_none">Select therapist</SelectItem>
                       {therapistsQuery.data?.items.map((t) => (
                         <SelectItem key={t.id} value={t.id}>
                           {therapistName(t.id)}
